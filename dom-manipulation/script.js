@@ -118,7 +118,8 @@ document.addEventListener('DOMContentLoaded', function () {
         console.error('Error posting quote to server:', error);
       }
     }
-    function startSyncing() {
+
+    function SyncQuotes() {
       fetchQuotesFromServer();
       setInterval(syncWithServer, 60000); // Sync every 60 seconds
     }
@@ -149,6 +150,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   
     filterQuote();
-    startSyncing();
+    SyncQuotes();
   });
   
