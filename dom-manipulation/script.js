@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
       fileReader.readAsText(event.target.files[0]);
     }
   
-    function updateCategories() {
+    function populateCategories() {
       const categories = [...new Set(quotes.map(quote => quote.category))];
       categoryFilter.innerHTML = '<option value="all">All Categories</option>';
       categories.forEach(category => {
@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     }
   
-    function filterQuotes() {
+    function filterQuote() {
       const selectedCategory = categoryFilter.value;
       quoteDisplay.innerHTML = '';
       const filteredQuotes = selectedCategory === 'all' ? quotes : quotes.filter(quote => quote.category === selectedCategory);
@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', function () {
       showRandomQuote();
     }
   
-    updateCategories();
+    populateCategories();
   
     const lastSelectedCategory = localStorage.getItem('lastSelectedCategory');
     if (lastSelectedCategory) {
@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function () {
       filterQuotes();
     });
   
-    filterQuotes();
+    filterQuote();
     startSyncing();
   });
   
