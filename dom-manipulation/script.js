@@ -103,16 +103,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
     async function postQuoteToServer(quote) {
       try {
-        await axios.post('https://jsonplaceholder.typicode.com/posts', {
-          title: quote.text,
-          body: quote.category,
-          userId: 1
+        await fetch('https://jsonplaceholder.typicode.com/posts', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            title: quote.text,
+            body: quote.category,
+            userId: 1
+          })
         });
       } catch (error) {
         console.error('Error posting quote to server:', error);
       }
     }
-  
     function startSyncing() {
       fetchQuotesFromServer();
       setInterval(syncWithServer, 60000); // Sync every 60 seconds
