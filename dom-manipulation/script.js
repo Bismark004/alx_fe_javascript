@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', function () {
     let quotes = JSON.parse(localStorage.getItem('quotes')) || [
       { text: "Life is what happens when you're busy making other plans.", category: "Life" },
@@ -12,6 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const newQuoteCategory = document.getElementById('newQuoteCategory');
     const exportQuotesButton = document.getElementById('exportQuotes');
     const importFileInput = document.getElementById('importFile');
+    const categoryFilter = document.getElementById('categoryFilter');
   
     function saveQuotes() {
       localStorage.setItem('quotes', JSON.stringify(quotes));
@@ -34,6 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
         newQuoteText.value = '';
         newQuoteCategory.value = '';
         alert('New quote added!');
+        updateCategories();
       } else {
         alert('Please enter both quote and category.');
       }
@@ -57,8 +60,31 @@ document.addEventListener('DOMContentLoaded', function () {
         quotes = quotes.concat(importedQuotes);
         saveQuotes();
         alert('Quotes imported successfully!');
+        updateCategories();
       };
       fileReader.readAsText(event.target.files[0]);
+    }
+  
+    function updateCategories() {
+      const categories = [...new Set(quotes.map(quote => quote.category))];
+      categoryFilter.innerHTML = '<option value="all">All Categories</option>';
+      categories.forEach(category => {
+        const option = document.createElement('option');
+        option.value = category;
+        option.textContent = category;
+        categoryFilter.appendChild(option);
+      });
+    }
+  
+    function filterQuotes() {
+      const selectedCategory = categoryFilter.value;
+      quoteDisplay.innerHTML = '';
+      const filteredQuotes = selectedCategory === 'all' ? quotes : quotes.filter(quote => quote.category === selectedCategory);
+      filteredQuotes.forEach(quote => {
+        const quoteElement = document.createElement('p');
+        quoteElement.textContent = `"${quote.text}" - ${quote.category}`;
+        quoteDisplay.appendChild(quoteElement);
+      });
     }
   
     newQuoteButton.addEventListener('click', showRandomQuote);
@@ -72,5 +98,20 @@ document.addEventListener('DOMContentLoaded', function () {
     } else {
       showRandomQuote();
     }
+  
+    updateCategories();
+  
+    const lastSelectedCategory = localStorage.getItem('lastSelectedCategory');
+    if (lastSelectedCategory) {
+      categoryFilter.value = lastSelectedCategory;
+    }
+  
+    categoryFilter.addEventListener('change', () => {
+      const selectedCategory = categoryFilter.value;
+      localStorage.setItem('lastSelectedCategory', selectedCategory);
+      filterQuotes();
+    });
+  
+    filterQuotes();
   });
   
