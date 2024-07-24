@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     }
   
-    async function fetcQuoteFromServer() {
+    async function fetchQuotesFromServer() {
       try {
         const response = await axios.get('https://jsonplaceholder.typicode.com/posts');
         const serverQuotes = response.data.map(post => ({ text: post.title, category: 'Server' }));
@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   
     function startSyncing() {
-      syncWithServer();
+      fetchQuotesFromServer();
       setInterval(syncWithServer, 60000); // Sync every 60 seconds
     }
   
@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', function () {
     categoryFilter.addEventListener('change', () => {
       const selectedCategory = categoryFilter.value;
       localStorage.setItem('lastSelectedCategory', selectedCategory);
-      filterQuotes();
+      filterQuote();
     });
   
     filterQuote();
