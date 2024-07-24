@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', function () {
     let quotes = JSON.parse(localStorage.getItem('quotes')) || [
       { text: "Life is what happens when you're busy making other plans.", category: "Life" },
@@ -26,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
       sessionStorage.setItem('lastQuote', JSON.stringify(randomQuote));
     }
   
-    function addQuote() {
+    function createAddQuoteForm() {
       const text = newQuoteText.value.trim();
       const category = newQuoteCategory.value.trim();
   
@@ -55,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function () {
   
     function importFromJsonFile(event) {
       const fileReader = new FileReader();
-      fileReader.onload = function(event) {
+      fileReader.onload = function (event) {
         const importedQuotes = JSON.parse(event.target.result);
         quotes = quotes.concat(importedQuotes);
         saveQuotes();
@@ -87,8 +86,28 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     }
   
+    async function syncWithServer() {
+      try {
+        const response = await axios.get('https://jsonplaceholder.typicode.com/posts');
+        const serverQuotes = response.data.map(post => ({ text: post.title, category: 'Server' }));
+        const mergedQuotes = [...quotes, ...serverQuotes];
+        const uniqueQuotes = Array.from(new Set(mergedQuotes.map(JSON.stringify))).map(JSON.parse);
+        quotes = uniqueQuotes;
+        saveQuotes();
+        updateCategories();
+        alert('Quotes synced with server successfully!');
+      } catch (error) {
+        console.error('Error syncing with server:', error);
+      }
+    }
+  
+    function startSyncing() {
+      syncWithServer();
+      setInterval(syncWithServer, 60000); // Sync every 60 seconds
+    }
+  
     newQuoteButton.addEventListener('click', showRandomQuote);
-    addQuoteButton.addEventListener('click', addQuote);
+    addQuoteButton.addEventListener('click', createAddQuoteForm);
     exportQuotesButton.addEventListener('click', exportToJsonFile);
     importFileInput.addEventListener('change', importFromJsonFile);
   
@@ -113,5 +132,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   
     filterQuotes();
+    startSyncing();
   });
   
