@@ -100,6 +100,18 @@ document.addEventListener('DOMContentLoaded', function () {
         console.error('Error syncing with server:', error);
       }
     }
+
+    async function postQuoteToServer(quote) {
+      try {
+        await axios.post('https://jsonplaceholder.typicode.com/posts', {
+          title: quote.text,
+          body: quote.category,
+          userId: 1
+        });
+      } catch (error) {
+        console.error('Error posting quote to server:', error);
+      }
+    }
   
     function startSyncing() {
       fetchQuotesFromServer();
