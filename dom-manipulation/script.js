@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function () {
           quotes = uniqueQuotes;
           saveQuotes();
           populateCategories();
-          alert('Quotes synced with server successfully!');
+          alert('Quotes synced with server !');
       } catch (error) {
           console.error('Error syncing with server:', error);
       }
