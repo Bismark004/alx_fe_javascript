@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function SyncQuotes() {
       fetchQuotesFromServer();
-      setInterval(syncWithServer, 60000); // Sync every 60 seconds
+      setInterval(fetchQuotesFromServer, 60000); // Sync every 60 seconds
     }
   
     newQuoteButton.addEventListener('click', showRandomQuote);
