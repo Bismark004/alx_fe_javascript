@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     }
   
-    async function syncWithServer() {
+    async function fetcQuoteFromServer() {
       try {
         const response = await axios.get('https://jsonplaceholder.typicode.com/posts');
         const serverQuotes = response.data.map(post => ({ text: post.title, category: 'Server' }));
@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const uniqueQuotes = Array.from(new Set(mergedQuotes.map(JSON.stringify))).map(JSON.parse);
         quotes = uniqueQuotes;
         saveQuotes();
-        updateCategories();
+        populateCategories();
         alert('Quotes synced with server successfully!');
       } catch (error) {
         console.error('Error syncing with server:', error);
